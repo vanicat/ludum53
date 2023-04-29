@@ -24,6 +24,7 @@ PLAYER_MASS = 2.0
 PLAYER_MAX_SPEED = 450
 ADV_FORCE = 300
 ROTATE_FORCE = 150
+DERIVE_FORCE = 10
 
 BARRE_SPEED = 2.5
 
@@ -109,10 +110,17 @@ class GameWindow(arcade.Window):
     def on_update(self, delta_time):
         """ Movement and game logic """
         physique_body = self.physics_engine.sprites[self.player_sprite].body
+        
         derive = physique_body.velocity.dot(physique_body.rotation_vector.rotated_degrees(90))
-        force = pymunk.Vec2d(0, -10) * derive
+        force = pymunk.Vec2d(0, -DERIVE_FORCE) * derive
         self.physics_engine.apply_force(self.player_sprite, force)
         #self.force = force.rotated(physique_body.angle)
+        
+        derive = physique_body.velocity_at_local_point((-10, 0)).dot(physique_body.rotation_vector.rotated_degrees(90 - self.barre / 10))
+        force = pymunk.Vec2d(0, -DERIVE_FORCE) * derive
+        physique_body.apply_force_at_local_point(force, (-10, 0))
+        #self.force = force.rotated(physique_body.angle)
+
         if self.forward_pressed:
             force = pymunk.Vec2d(ADV_FORCE, 0)
             self.physics_engine.apply_force(self.player_sprite, force)
@@ -121,16 +129,8 @@ class GameWindow(arcade.Window):
             self.physics_engine.apply_force(self.player_sprite, force)
         if self.right_pressed:
             self.barre -= BARRE_SPEED
-            force = pymunk.Vec2d(ADV_FORCE, 0)
-            apply = pymunk.Vec2d(0, 1)
-            physique_body.apply_force_at_local_point(force, apply)
-            physique_body.apply_force_at_local_point(-force, -apply)
         if self.left_pressed:
             self.barre += BARRE_SPEED
-            force = pymunk.Vec2d(ADV_FORCE, 0)
-            apply = pymunk.Vec2d(0, -1)
-            physique_body.apply_force_at_local_point(force, apply)
-            physique_body.apply_force_at_local_point(-force, -apply)
 
         self.physics_engine.step()
 
