@@ -9,11 +9,11 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 # Damping - Amount of speed lost per second
-DEFAULT_DAMPING = 1.0
-PLAYER_DAMPING = 1.0
+DEFAULT_DAMPING = 0.1
+PLAYER_DAMPING = 0.1
 
 # Friction between objects
-PLAYER_FRICTION = 1.0
+PLAYER_FRICTION = 5
 WALL_FRICTION = 0.7
 DYNAMIC_ITEM_FRICTION = 0.6
 
@@ -96,21 +96,21 @@ class GameWindow(arcade.Window):
     def on_update(self, delta_time):
         """ Movement and game logic """
         angle = self.player_sprite.radians
-        print(angle)
         if self.forward_pressed:
-            force = pymunk.Vec2d(ADV_FORCE, 0).rotated(angle)
+            print(angle)
+            force = pymunk.Vec2d(ADV_FORCE, 0)
             self.physics_engine.apply_force(self.player_sprite, force)
         if self.backward_pressed:
-            force = pymunk.Vec2d(- ADV_FORCE, 0).rotated(angle)
+            force = pymunk.Vec2d(- ADV_FORCE, 0)
             self.physics_engine.apply_force(self.player_sprite, force)
         if self.right_pressed:
-            force = pymunk.Vec2d(ADV_FORCE, 0).rotated(angle)
-            apply = pymunk.Vec2d(0, 1).rotated(angle)
+            force = pymunk.Vec2d(ADV_FORCE, 0)
+            apply = pymunk.Vec2d(0, 1)
             self.physics_engine.sprites[self.player_sprite].body.apply_force_at_local_point(force, apply)
             self.physics_engine.sprites[self.player_sprite].body.apply_force_at_local_point(-force, -apply)
         if self.left_pressed:
-            force = pymunk.Vec2d(ADV_FORCE, 0).rotated(angle)
-            apply = pymunk.Vec2d(0, -1).rotated(angle)
+            force = pymunk.Vec2d(ADV_FORCE, 0)
+            apply = pymunk.Vec2d(0, -1)
             self.physics_engine.sprites[self.player_sprite].body.apply_force_at_local_point(force, apply)
             self.physics_engine.sprites[self.player_sprite].body.apply_force_at_local_point(-force, -apply)
 
@@ -120,6 +120,12 @@ class GameWindow(arcade.Window):
         """ Draw everything """
         self.clear()
         self.scene.draw()
+        angle = self.player_sprite.radians
+        force = pymunk.Vec2d(ADV_FORCE, 0).rotated(angle)
+        x = self.player_sprite.center_x
+        y = self.player_sprite.center_y
+        arcade.draw_line(x, y, x + force.x, y + force.y, (200, 0, 100))
+
 
 
 def main():
