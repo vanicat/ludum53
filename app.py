@@ -38,6 +38,8 @@ class GameWindow(arcade.Window):
     forward_pressed: bool
     backward_pressed: bool
     barre: float
+    camera: arcade.Camera
+    gui_camera: arcade.Camera
 
     def __init__(self, width, height, title):
         """ Create the variables """
@@ -51,6 +53,9 @@ class GameWindow(arcade.Window):
     def setup(self):
         """ Set up everything with the game """
         self.physics_engine = arcade.PymunkPhysicsEngine(damping=DEFAULT_DAMPING)
+
+        self.camera = arcade.Camera(self.width, self.height)
+        self.gui_camera = arcade.Camera(self.width, self.height)
 
         self.gui = arcade.Scene()
         self.gui.add_sprite_list("GUI")
@@ -137,10 +142,14 @@ class GameWindow(arcade.Window):
     def on_draw(self):
         """ Draw everything """
         self.clear()
+        self.camera.move_to((self.player_sprite.center_x - self.camera.viewport_width / 2, 
+                             self.player_sprite.center_y - self.camera.viewport_height / 2), .5)
+        self.camera.use()
         self.scene.draw()
 
         self.roue.angle = self.barre
 
+        self.gui_camera.use()
         self.gui.draw()
 
         if self.force:
