@@ -1,6 +1,8 @@
 import arcade
+import arcade.gui
 from typing import Optional
 import math
+from arcade.application import Window
 import pymunk
 
 from boat import Boat, BoatView
@@ -17,6 +19,78 @@ class GameWindow(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+        self.my_music = arcade.load_sound("assets/music/music-wave.wav")
+        self.media_player = self.my_music.play(loop=True)
+
+        self.menu = Menu(self, self.media_player)
+
+
+    def music_over(self):
+        self.my_music.stop(self.media_player)
+        self.media_player.pop_handlers()
+        self.media_player = self.my_music.play()
+        self.media_player.push_handlers(on_eos=self.my_music.play)
+
+    def show_menu(self):
+        self.show_view(self.menu)
+
+
+class Menu(arcade.View):
+    def __init__(self, window: Window, media_player):
+        super().__init__(window)
+
+        self.media_player = media_player
+
+        self.manager = arcade.gui.UIManager()
+        self.v_box = arcade.gui.UIBoxLayout()
+
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200)
+        self.v_box.add(start_button.with_space_around(bottom=20))
+        start_button.on_click = self.start_game
+
+        more_volume_button = arcade.gui.UIFlatButton(text="More Music", width=200)
+        self.v_box.add(more_volume_button.with_space_around(bottom=20))
+        more_volume_button.on_click = self.more_volume
+
+        less_volume_button = arcade.gui.UIFlatButton(text="Less Music", width=200)
+        self.v_box.add(less_volume_button.with_space_around(bottom=20))
+        less_volume_button.on_click = self.less_volume
+
+        quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
+        self.v_box.add(quit_button.with_space_around(bottom=20))
+
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=self.v_box)
+        )
+
+    def less_volume(self, event):
+        v = self.media_player.volume
+        v = max(0, v - 0.1)
+        self.media_player.volume = v
+
+    def more_volume(self, event):
+        v = self.media_player.volume
+        v = min(1, v + 0.1)
+        self.media_player.volume = v
+
+    def start_game(self, event):
+        start_game(self.window)
+
+    def on_hide_view(self):
+        self.manager.disable()
+        self.window.set_mouse_visible(False)
+        return super().on_hide_view()
+    
+    def on_show_view(self):
+        self.manager.enable()
+        self.window.set_mouse_visible(True)
+        return super().on_show_view()
+    
+    def on_draw(self):
+        self.clear()
+        self.manager.draw()
+        return super().on_draw()
+
 class GameView(arcade.View):
     scene: arcade.Scene
     physics_engine: arcade.PymunkPhysicsEngine
@@ -32,11 +106,11 @@ class GameView(arcade.View):
 
     in_port: Optional[str] = None
 
-    def __init__(self):
+    def __init__(self, window):
         """ Create the variables """
 
         # Init the parent class
-        super().__init__()
+        super().__init__(window)
 
         self.window.set_mouse_visible(False)
 
@@ -160,13 +234,16 @@ class GameView(arcade.View):
             arcade.draw_line(x, y, x + self.force.x, y + self.force.y, (200, 0, 100), line_width=3)
 
 
+def start_game(window):
+    start_view = GameView(window)
+    window.show_view(start_view)
+    start_view.setup()
+
 
 def main():
     """ Main function """
     window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    start_view = GameView()
-    window.show_view(start_view)
-    start_view.setup()
+    window.show_menu()
     arcade.run()
 
 
