@@ -49,7 +49,7 @@ class Menu(arcade.View):
         start_button.on_click = self.start_game # type: ignore[method-assign]
 
         if go_back:
-            continue_button = arcade.gui.UIFlatButton(text="Start Game", width=200)
+            continue_button = arcade.gui.UIFlatButton(text="Continue", width=200)
             self.v_box.add(continue_button.with_space_around(bottom=20))
             continue_button.on_click = go_back # type: ignore[method-assign]
 
@@ -171,7 +171,7 @@ class GameView(arcade.View):
 
         self.force = None
 
-    def come_back(self):
+    def come_back(self, ev=None):
         self.window.show_view(self)
 
 
@@ -187,6 +187,9 @@ class GameView(arcade.View):
             self.backward_pressed = True
         elif key == arcade.key.P:
             self.port_pressed = True
+        elif key == arcade.key.ESCAPE:
+            #TODO: better restarting of a game, with no leak
+            self.window.show_view(Menu(self.window, self.come_back))
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
