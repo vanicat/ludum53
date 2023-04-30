@@ -41,6 +41,7 @@ class GameWindow(arcade.Window):
     barre: float
     camera: arcade.Camera
     gui_camera: arcade.Camera
+    tile_map = arcade.TileMap
     background = arcade.Texture
 
     def __init__(self, width, height, title):
@@ -66,8 +67,19 @@ class GameWindow(arcade.Window):
         self.roue.center_y = self.height - 64
         self.gui.add_sprite("GUI", self.roue)
 
+        layer_options = {
+            "Niveau 0": {
+                "use_spatial_hash": True,
+            },
+            "Dessus": {
+                "use_spatial_hash": True,
+            }
+        }
+
+        self.tile_map = arcade.load_tilemap("assets/carte1.tmx", layer_options=layer_options)
         self.background = arcade.load_texture("assets/fond.png")
 
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
         self.scene.add_sprite_list("Player")
         self.scene.add_sprite_list("Walls", use_spatial_hash=True) 
 
