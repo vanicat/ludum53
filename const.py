@@ -29,3 +29,4 @@ BARRE_SPEED = 2.5
 MAX_BARRE = 290 # doit être divisble par BARRE_SPEED, idéalement en calcul exacte
 
 
+RED = arcade.color_from_hex_string("#950A0A")

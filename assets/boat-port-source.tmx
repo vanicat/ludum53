@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="24" height="13" tilewidth="8" tileheight="8" infinite="0" nextlayerid="4" nextobjectid="25">
+ <tileset firstgid="1" source="terrain.tsx"/>
+ <layer id="1" name="boat" width="24" height="13">
+  <data encoding="csv">
+56,0,0,0,56,0,0,0,56,0,0,0,56,0,0,0,74,74,74,0,0,74,0,74,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,74,0,74,74,74,74,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,56,27,56,0,0,56,0,56,0,56,0,0,0,74,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,74,0,0,74,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,74,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,0,74,0,0,74,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,14,0,0,0,14,0,0,0,74,0,0,0,0,0,0,0,
+0,0,0,9,0,0,0,10,0,0,0,0,0,0,0,0,74,0,0,0,74,0,0,74
+</data>
+ </layer>
+ <objectgroup id="3" name="coffre" visible="0">
+  <object id="1" name="marchand01" type="SellTrunk" x="39.0909" y="4.90909" width="9.81818" height="4.90909"/>
+  <object id="2" name="marchand02" type="SellTrunk" x="52" y="4.90909" width="10.1818" height="5.27273"/>
+  <object id="3" name="marchand03" type="SellTrunk" x="65.0909" y="4.90909" width="10" height="5.09091"/>
+  <object id="4" name="marchand04" type="SellTrunk" x="78" y="4.90909" width="9.81818" height="4.90909"/>
+  <object id="5" name="marchand05" type="SellTrunk" x="39.2727" y="12.9091" width="9.45455" height="5.09091"/>
+  <object id="6" name="marchand06" type="SellTrunk" x="52" y="12.9091" width="10" height="5"/>
+  <object id="7" name="marchand07" type="SellTrunk" x="65" y="12.9091" width="10" height="5"/>
+  <object id="9" name="marchand08" type="SellTrunk" x="77.9091" y="13" width="9.90909" height="5"/>
+  <object id="10" name="marchand09" type="SellTrunk" x="39" y="20.8182" width="10.0909" height="5.18182"/>
+  <object id="11" name="marchand10" type="SellTrunk" x="51.9091" y="20.8182" width="10" height="5.18182"/>
+  <object id="12" name="marchand11" type="SellTrunk" x="65.0909" y="20.8182" width="9.81818" height="5"/>
+  <object id="13" name="marchand12" type="SellTrunk" x="77.8182" y="20.9091" width="10.0909" height="5"/>
+  <object id="14" name="boat01" type="BoatTrunk" x="41.0625" y="76" width="9.875" height="5"/>
+  <object id="15" name="boat02" type="BoatTrunk" x="52.0625" y="76" width="9.875" height="5"/>
+  <object id="16" name="boat03" type="BoatTrunk" x="63" y="75.9375" width="9.8125" height="5.1875"/>
+  <object id="17" name="boat04" type="BoatTrunk" x="41" y="81.9375" width="9.9375" height="5"/>
+  <object id="18" name="boat05" type="BoatTrunk" x="52.0625" y="81.9375" width="9.8125" height="5.125"/>
+  <object id="19" name="boat06" type="BoatTrunk" x="63" y="81.875" width="9.9375" height="5.25"/>
+  <object id="20" name="boat07" type="BoatTrunk" x="41.0625" y="87.9375" width="9.8125" height="4.9375"/>
+  <object id="21" name="boat08" type="BoatTrunk" x="51.9375" y="87.9375" width="10.0625" height="5"/>
+  <object id="22" name="boat09" type="BoatTrunk" x="63" y="87.875" width="9.875" height="5"/>
+  <object id="24" name="boat10" type="BoatTrunk" x="74.0625" y="78.9375" width="10.8125" height="5"/>
+  <object id="23" name="boat11" type="BoatTrunk" x="74" y="84.9375" width="11" height="5.0625"/>
+ </objectgroup>
+ <layer id="2" name="port" width="24" height="13">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+56,56,56,56,27,0,0,0,28,0,0,0,0,0,56,0,74,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+20,0,0,0,20,0,0,0,20,0,0,0,20,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

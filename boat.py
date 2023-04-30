@@ -1,3 +1,4 @@
+from typing import Optional
 from arcade.application import Window
 import pymunk
 import arcade
@@ -9,6 +10,7 @@ class Boat(arcade.Sprite):
     physics_engine: arcade.PymunkPhysicsEngine
     physique_body: pymunk.Body
     barre: float
+    inventaire: dict
 
     def __init__(self, pos:tuple[float, float], scene:arcade.Scene, engine:arcade.PymunkPhysicsEngine):
         super().__init__("assets/boat.png", 1)
@@ -27,6 +29,12 @@ class Boat(arcade.Sprite):
         self.physique_body = body
 
         self.barre = 0
+
+        self.inventaire = {}
+        for i in range(4):
+            for j in range(3):
+                self.inventaire[f"boat trunk {i}{j}"] = "empty\n\n capacity : 1000"
+
 
     def my_update(self, left_pressed, right_pressed, forward_pressed, backward_pressed):  
         derive = self.physique_body.velocity.dot(self.physique_body.rotation_vector.rotated_degrees(90))
@@ -52,17 +60,33 @@ class Boat(arcade.Sprite):
 
 
 class BoatView(arcade.View):
+    window: Window
+    current: Optional[arcade.TiledObject] = None
     def __init__(self, window: Window, boat: Boat, come_back):
         super().__init__(window)
 
         self.boat = boat
         self.come_back = come_back
 
-        self.tile_map = arcade.load_tilemap("assets/boat.tmx", scaling=BOAT_VIEW_SCALLING)
+        self.tile_map = arcade.load_tilemap("assets/boat.tmx", scaling=1)
         self.background = arcade.load_texture("assets/fond.png")
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
         self.scene.add_sprite_list("Player")
+
+        for img in self.tile_map.sprite_lists["Image"]:
+            img.top = self.window.height
+
+        for obj in self.tile_map.object_lists["coffres"]:
+            for coord in obj.shape:
+                coord[1] += self.window.height # type: ignore
+
+    def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
+        self.current = None
+        for obj in self.tile_map.object_lists["coffres"]:
+            if arcade.is_point_in_polygon(x, y, obj.shape):
+                self.current = obj
+        return super().on_mouse_motion(x, y, dx, dy)
 
     def on_key_press(self, symbol: int, modifiers: int):
         if symbol == arcade.key.ESCAPE:
@@ -74,6 +98,14 @@ class BoatView(arcade.View):
         self.clear()
 
         self.scene.draw()
+
+        for obj in self.tile_map.object_lists["coffres"]:
+            arcade.draw_polygon_outline(obj.shape, RED)
+
+        if self.current:
+            arcade.draw_polygon_filled(self.current.shape, RED)
+            if self.current.type == "BoatTrunk":
+                arcade.draw_text(self.boat.inventaire[self.current.name], 765 + 30, self.window.height / 2 - 30)
 
     def on_show_view(self):
         self.window.set_mouse_visible(True)
