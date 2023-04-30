@@ -33,7 +33,7 @@ class Boat(arcade.Sprite):
         self.inventaire = {}
         for i in range(4):
             for j in range(3):
-                self.inventaire[f"boat trunk {i}{j}"] = "empty\n\n capacity : 1000"
+                self.inventaire[f"boat trunk {i}{j}"] = f"empty {3*i+j} \n\n capacity : 1000"
 
 
     def my_update(self, left_pressed, right_pressed, forward_pressed, backward_pressed):  
@@ -62,6 +62,9 @@ class Boat(arcade.Sprite):
 class BoatView(arcade.View):
     window: Window
     current: Optional[arcade.TiledObject] = None
+    select_boat:  Optional[arcade.TiledObject] = None
+    select_dock:  Optional[arcade.TiledObject] = None
+
     def __init__(self, window: Window, boat: Boat, come_back):
         super().__init__(window)
 
@@ -79,7 +82,7 @@ class BoatView(arcade.View):
 
         for obj in self.tile_map.object_lists["coffres"]:
             for coord in obj.shape:
-                coord[1] += self.window.height # type: ignore
+                coord[1] += self.window.height # type: ignore[index]
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         self.current = None
@@ -92,6 +95,14 @@ class BoatView(arcade.View):
         if symbol == arcade.key.ESCAPE:
             self.come_back()
         return super().on_key_press(symbol, modifiers)
+    
+    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
+        if self.current:
+            if self.current.type == "BoatTrunk":
+                self.select_boat = self.current
+            else:
+                self.select_dock = self.current
+        return super().on_mouse_press(x, y, button, modifiers)
 
     def on_draw(self):
         """ Draw everything """
@@ -106,6 +117,16 @@ class BoatView(arcade.View):
             arcade.draw_polygon_filled(self.current.shape, RED)
             if self.current.type == "BoatTrunk":
                 arcade.draw_text(self.boat.inventaire[self.current.name], 765 + 30, self.window.height / 2 - 30)
+
+        if self.select_dock:
+            arcade.draw_polygon_filled(self.select_dock.shape, SELECTED)
+
+        if self.select_boat:
+            arcade.draw_polygon_filled(self.select_boat.shape, SELECTED)
+
+            if self.current is None or self.current.type != "BoatTrunk":
+                arcade.draw_text(self.boat.inventaire[self.select_boat.name], 765 + 30, self.window.height / 2 - 30)
+
 
     def on_show_view(self):
         self.window.set_mouse_visible(True)

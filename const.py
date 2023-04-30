@@ -30,3 +30,4 @@ MAX_BARRE = 290 # doit être divisble par BARRE_SPEED, idéalement en calcul exa
 
 
 RED = arcade.color_from_hex_string("#950A0A")
+SELECTED = arcade.color_from_hex_string("#1023A1")
