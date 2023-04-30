@@ -41,6 +41,7 @@ class GameWindow(arcade.Window):
     barre: float
     camera: arcade.Camera
     gui_camera: arcade.Camera
+    background = arcade.Texture
 
     def __init__(self, width, height, title):
         """ Create the variables """
@@ -65,7 +66,8 @@ class GameWindow(arcade.Window):
         self.roue.center_y = self.height - 64
         self.gui.add_sprite("GUI", self.roue)
 
-        self.scene = arcade.Scene()
+        self.background = arcade.load_texture("assets/fond.png")
+
         self.scene.add_sprite_list("Player")
         self.scene.add_sprite_list("Walls", use_spatial_hash=True) 
 
@@ -147,6 +149,8 @@ class GameWindow(arcade.Window):
         self.camera.move_to((self.player_sprite.center_x - self.camera.viewport_width / 2, 
                              self.player_sprite.center_y - self.camera.viewport_height / 2), .5)
         self.camera.use()
+
+        arcade.draw_texture_rectangle(self.tile_map.width * TILE_SIZE/2, self.tile_map.height * TILE_SIZE/2, self.tile_map.width * TILE_SIZE, self.tile_map.height * TILE_SIZE, self.background)
         self.scene.draw()
 
         self.roue.angle = self.barre
