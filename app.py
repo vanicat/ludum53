@@ -27,6 +27,7 @@ ROTATE_FORCE = 150
 DERIVE_FORCE = 10
 
 BARRE_SPEED = 2.5
+MAX_BARRE = 290 # doit être divisble par BARRE_SPEED, idéalement en calcul exacte
 
 class GameWindow(arcade.Window):
     """ Main Window """
@@ -133,9 +134,10 @@ class GameWindow(arcade.Window):
             force = pymunk.Vec2d(- ADV_FORCE, 0)
             self.physics_engine.apply_force(self.player_sprite, force)
         if self.right_pressed:
-            self.barre -= BARRE_SPEED
+            self.barre = max(-MAX_BARRE, self.barre - BARRE_SPEED)
         if self.left_pressed:
-            self.barre += BARRE_SPEED
+            self.barre = min(MAX_BARRE, self.barre + BARRE_SPEED)
+                             
 
         self.physics_engine.step()
 
