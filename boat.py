@@ -110,8 +110,10 @@ class BoatView(arcade.View):
         if self.current:
             if self.current.type == "BoatTrunk":
                 self.select_boat = self.current
-            else:
+            elif self.current.type == "PortTrunk":
                 self.select_dock = self.current
+            elif self.current.type == "ButtonExchange":
+                pass
         return super().on_mouse_press(x, y, button, modifiers)
 
     @staticmethod
