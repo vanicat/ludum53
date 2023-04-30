@@ -152,7 +152,7 @@ class GameView(arcade.View):
         self.gui.draw()
 
         if self.in_port:
-            arcade.draw_text("Press P to land in the port", 10, self.window.height - 20)
+            arcade.draw_text("Press P to dock", 10, self.window.height - 20)
 
         if self.force:
             x = self.player_sprite.center_x
