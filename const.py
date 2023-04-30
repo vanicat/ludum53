@@ -1,8 +1,10 @@
+import arcade 
+
 SCREEN_TITLE = "Ludum 32"
 
 # Size of screen to show, in pixels
 SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
+SCREEN_HEIGHT = 768
 TILE_SIZE = 32
 
 # Damping - Amount of speed lost per second
@@ -24,3 +26,5 @@ DERIVE_FORCE = 10
 
 BARRE_SPEED = 2.5
 MAX_BARRE = 290 # doit être divisble par BARRE_SPEED, idéalement en calcul exacte
+
+

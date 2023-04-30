@@ -1,23 +1,13 @@
 import arcade
+from typing import Optional
 import math
 import pymunk
 
-from boat import Boat
+from boat import Boat, BoatView
 from const import *
 
 class GameWindow(arcade.Window):
     """ Main Window """
-
-    scene: arcade.Scene
-    physics_engine: arcade.PymunkPhysicsEngine
-    left_pressed: bool
-    right_pressed: bool
-    forward_pressed: bool
-    backward_pressed: bool
-    camera: arcade.Camera
-    gui_camera: arcade.Camera
-    tile_map = arcade.TileMap
-    background = arcade.Texture
 
     def __init__(self, width, height, title):
         """ Create the variables """
@@ -26,6 +16,31 @@ class GameWindow(arcade.Window):
         super().__init__(width, height, title)
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
+
+class GameView(arcade.View):
+    scene: arcade.Scene
+    physics_engine: arcade.PymunkPhysicsEngine
+    left_pressed: bool = False
+    right_pressed: bool = False
+    forward_pressed: bool = False
+    backward_pressed: bool = False
+    port_pressed: bool = False
+    camera: arcade.Camera
+    gui_camera: arcade.Camera
+    tile_map = arcade.TileMap
+    background = arcade.Texture
+
+    in_port: Optional[str] = None
+
+    def __init__(self):
+        """ Create the variables """
+
+        # Init the parent class
+        super().__init__()
+
+        self.window.set_mouse_visible(False)
+
+        arcade.set_background_color(arcade.color_from_hex_string("#2599c8"))
 
     def place_camera(self):
         x = max(0, self.player_sprite.center_x - self.camera.viewport_width / 2)
@@ -38,14 +53,14 @@ class GameWindow(arcade.Window):
         """ Set up everything with the game """
         self.physics_engine = arcade.PymunkPhysicsEngine(damping=DEFAULT_DAMPING)
 
-        self.camera = arcade.Camera(self.width, self.height)
-        self.gui_camera = arcade.Camera(self.width, self.height)
+        self.camera = arcade.Camera(self.window.width, self.window.height)
+        self.gui_camera = arcade.Camera(self.window.width, self.window.height)
 
         self.gui = arcade.Scene()
         self.gui.add_sprite_list("GUI")
         self.roue = arcade.Sprite("assets/roue2.png", 4) 
-        self.roue.center_x = self.width - 64
-        self.roue.center_y = self.height - 64
+        self.roue.center_x = self.window.width - 64
+        self.roue.center_y = self.window.height - 64
         self.gui.add_sprite("GUI", self.roue)
 
         layer_options = {
@@ -73,11 +88,12 @@ class GameWindow(arcade.Window):
 
         self.player_sprite = Boat(self.object_map["start"].shape, self.scene, self.physics_engine)
 
-        self.left_pressed = False
-        self.right_pressed =  False
-        self.forward_pressed = False
-        self.backward_pressed = False
+        self.boat_view = BoatView(self.window, self.player_sprite, self.come_back)
+
         self.force = None
+
+    def come_back(self):
+        self.window.show_view(self)
 
 
     def on_key_press(self, key, modifiers):
@@ -90,6 +106,8 @@ class GameWindow(arcade.Window):
             self.forward_pressed = True
         elif key == arcade.key.DOWN:
             self.backward_pressed = True
+        elif key == arcade.key.P:
+            self.port_pressed = True
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
@@ -101,12 +119,23 @@ class GameWindow(arcade.Window):
             self.forward_pressed = False
         elif key == arcade.key.DOWN:
             self.backward_pressed = False
+        elif key == arcade.key.P:
+            self.port_pressed = False
 
     def on_update(self, delta_time):
         """ Movement and game logic """
         self.player_sprite.my_update(self.left_pressed, self.right_pressed, self.forward_pressed, self.backward_pressed)
 
         self.physics_engine.step()
+
+        self.in_port = None    
+        for obj in self.object_map.values():
+            if obj.type == "Livraison" and arcade.is_point_in_polygon(self.player_sprite.center_x, self.player_sprite.center_y, obj.shape):
+                self.in_port = obj.name
+
+        if self.in_port and self.port_pressed:
+            self.port_pressed = False
+            self.window.show_view(self.boat_view)
 
     def on_draw(self):
         """ Draw everything """
@@ -122,6 +151,9 @@ class GameWindow(arcade.Window):
         self.gui_camera.use()
         self.gui.draw()
 
+        if self.in_port:
+            arcade.draw_text("Press P to land in the port", 10, self.window.height - 20)
+
         if self.force:
             x = self.player_sprite.center_x
             y = self.player_sprite.center_y
@@ -132,7 +164,9 @@ class GameWindow(arcade.Window):
 def main():
     """ Main function """
     window = GameWindow(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    window.setup()
+    start_view = GameView()
+    window.show_view(start_view)
+    start_view.setup()
     arcade.run()
 
 

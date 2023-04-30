@@ -1,3 +1,4 @@
+from arcade.application import Window
 import pymunk
 import arcade
 
@@ -48,3 +49,36 @@ class Boat(arcade.Sprite):
             self.barre = max(-MAX_BARRE, self.barre - BARRE_SPEED)
         if left_pressed:
             self.barre = min(MAX_BARRE, self.barre + BARRE_SPEED)
+
+
+class BoatView(arcade.View):
+    def __init__(self, window: Window, boat: Boat, come_back):
+        super().__init__(window)
+
+        self.boat = boat
+        self.come_back = come_back
+
+        self.tile_map = arcade.load_tilemap("assets/boat.tmx", scaling=7)
+        self.background = arcade.load_texture("assets/fond.png")
+
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
+        self.scene.add_sprite_list("Player")
+
+    def on_key_press(self, symbol: int, modifiers: int):
+        if symbol == arcade.key.ESCAPE:
+            self.come_back()
+        return super().on_key_press(symbol, modifiers)
+
+    def on_draw(self):
+        """ Draw everything """
+        self.clear()
+
+        self.scene.draw()
+
+    def on_show_view(self):
+        self.window.set_mouse_visible(True)
+        return super().on_show_view()
+    
+    def on_hide_view(self):
+        self.window.set_mouse_visible(False)
+        return super().on_show_view()
