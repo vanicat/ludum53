@@ -69,7 +69,7 @@ class GameWindow(arcade.Window):
 
         self.gui = arcade.Scene()
         self.gui.add_sprite_list("GUI")
-        self.roue = arcade.Sprite("assets\la roue.png", 4) 
+        self.roue = arcade.Sprite("assets/roue2.png", 4) 
         self.roue.center_x = self.width - 64
         self.roue.center_y = self.height - 64
         self.gui.add_sprite("GUI", self.roue)
