@@ -78,8 +78,7 @@ class GameWindow(arcade.Window):
         self.forward_pressed = False
         self.backward_pressed = False
         self.force = None
-        self.barre = 0.0
-        
+
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
