@@ -63,6 +63,7 @@ class Menu(arcade.View):
 
         quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
         self.v_box.add(quit_button.with_space_around(bottom=20))
+        quit_button.on_click = self.quit  # type: ignore[method-assign]
 
         self.manager.add(
             arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=self.v_box)
@@ -80,6 +81,9 @@ class Menu(arcade.View):
 
     def start_game(self, event):
         start_game(self.window)
+
+    def quit(self, event):
+        arcade.exit()
 
     def on_hide_view(self):
         self.manager.disable()
