@@ -22,7 +22,7 @@ class GameWindow(arcade.Window):
         self.my_music = arcade.load_sound("assets/music/music-wave.wav")
         self.media_player = self.my_music.play(loop=True)
 
-        self.menu = Menu(self, self.media_player)
+        self.menu = Menu(self)
 
 
     def music_over(self):
@@ -36,25 +36,30 @@ class GameWindow(arcade.Window):
 
 
 class Menu(arcade.View):
-    def __init__(self, window: Window, media_player):
+    def __init__(self, window: GameWindow, go_back = None):
         super().__init__(window)
 
-        self.media_player = media_player
+        self.media_player = window.media_player
 
         self.manager = arcade.gui.UIManager()
         self.v_box = arcade.gui.UIBoxLayout()
 
         start_button = arcade.gui.UIFlatButton(text="Start Game", width=200)
         self.v_box.add(start_button.with_space_around(bottom=20))
-        start_button.on_click = self.start_game
+        start_button.on_click = self.start_game # type: ignore[method-assign]
+
+        if go_back:
+            continue_button = arcade.gui.UIFlatButton(text="Start Game", width=200)
+            self.v_box.add(continue_button.with_space_around(bottom=20))
+            continue_button.on_click = go_back # type: ignore[method-assign]
 
         more_volume_button = arcade.gui.UIFlatButton(text="More Music", width=200)
         self.v_box.add(more_volume_button.with_space_around(bottom=20))
-        more_volume_button.on_click = self.more_volume
+        more_volume_button.on_click = self.more_volume # type: ignore[method-assign]
 
         less_volume_button = arcade.gui.UIFlatButton(text="Less Music", width=200)
         self.v_box.add(less_volume_button.with_space_around(bottom=20))
-        less_volume_button.on_click = self.less_volume
+        less_volume_button.on_click = self.less_volume # type: ignore[method-assign]
 
         quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
         self.v_box.add(quit_button.with_space_around(bottom=20))
