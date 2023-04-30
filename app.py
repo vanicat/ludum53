@@ -4,6 +4,7 @@ from typing import Optional
 import math
 from arcade.application import Window
 import pymunk
+import json
 
 from boat import Boat, BoatView
 from const import *
@@ -112,6 +113,7 @@ class GameView(arcade.View):
     gui_camera: arcade.Camera
     tile_map: arcade.TileMap
     background: arcade.Texture
+    dock_inventory: dict
 
     in_port: Optional[str] = None
 
@@ -175,6 +177,9 @@ class GameView(arcade.View):
 
         self.force = None
 
+        with open("assets/inventaire.json") as f:
+            self.dock_inventory = json.load(f)
+
     def come_back(self, ev=None):
         self.window.show_view(self)
 
@@ -214,13 +219,14 @@ class GameView(arcade.View):
 
         self.physics_engine.step()
 
-        self.in_port = None    
+        self.in_port = None
         for obj in self.object_map.values():
-            if obj.type == "Livraison" and arcade.is_point_in_polygon(self.player_sprite.center_x, self.player_sprite.center_y, obj.shape):
-                self.in_port = obj.name
+            if obj.type == "Dock" and arcade.is_point_in_polygon(self.player_sprite.center_x, self.player_sprite.center_y, obj.shape):
+                self.in_port = obj
 
         if self.in_port and self.port_pressed:
             self.port_pressed = False
+            self.boat_view.setup(self.dock_inventory[self.in_port.name])
             self.window.show_view(self.boat_view)
 
     def on_draw(self):

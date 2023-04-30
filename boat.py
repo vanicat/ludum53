@@ -33,7 +33,11 @@ class Boat(arcade.Sprite):
         self.inventaire = {}
         for i in range(4):
             for j in range(3):
-                self.inventaire[f"boat trunk {i}{j}"] = f"empty {3*i+j} \n\n capacity : 1000"
+                self.inventaire[f"boat trunk {i}{j}"] = {
+                    "name": "Nothing",
+                    "dest": None,
+                    "pay": 0
+                }
 
 
     def my_update(self, left_pressed, right_pressed, forward_pressed, backward_pressed):  
@@ -64,6 +68,7 @@ class BoatView(arcade.View):
     current: Optional[arcade.TiledObject] = None
     select_boat:  Optional[arcade.TiledObject] = None
     select_dock:  Optional[arcade.TiledObject] = None
+    asset: dict
 
     def __init__(self, window: Window, boat: Boat, come_back):
         super().__init__(window)
@@ -81,8 +86,19 @@ class BoatView(arcade.View):
             img.top = self.window.height
 
         for obj in self.tile_map.object_lists["coffres"]:
-            for coord in obj.shape:
-                coord[1] += self.window.height # type: ignore[index]
+                for coord in obj.shape:
+                    coord[1] -= img.bottom + 48 # type: ignore[index]
+
+
+    def setup(self, dock):
+        k = 0
+        self.asset = {}
+        for i in range(3):
+            for j in range(1, 5):
+                name = f"port trunk {i}{j}"
+                self.asset[name] = dock[k]
+                k = (k + 1) % len(dock)
+
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         self.current = None
