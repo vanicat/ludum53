@@ -7,6 +7,7 @@ SCREEN_TITLE = "Ludum 32"
 # Size of screen to show, in pixels
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+TILE_SIZE = 32
 
 # Damping - Amount of speed lost per second
 DEFAULT_DAMPING = 0.7
@@ -52,6 +53,12 @@ class GameWindow(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
+    def place_camera(self):
+        x = max(0, self.player_sprite.center_x - self.camera.viewport_width / 2)
+        y = max(0, self.player_sprite.center_y - self.camera.viewport_height / 2)
+        self.camera.move_to((x, y), .5)
+
+
 
     def setup(self):
         """ Set up everything with the game """
@@ -81,11 +88,18 @@ class GameWindow(arcade.Window):
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
         self.scene.add_sprite_list("Player")
-        self.scene.add_sprite_list("Walls", use_spatial_hash=True) 
+
+        object_layer = self.tile_map.object_lists["objets"]
+        self.object_map = { obj.name: obj for obj in object_layer }
+
+        self.physics_engine.add_sprite_list(self.scene.get_sprite_list("Niveau 0"),
+                                            friction=WALL_FRICTION,
+                                            collision_type="wall",
+                                            body_type=arcade.PymunkPhysicsEngine.STATIC)
 
         self.player_sprite = arcade.Sprite("assets/boat.png", 1)
-        self.player_sprite.center_x = 64
-        self.player_sprite.center_y = 120
+        self.player_sprite.center_x = self.object_map["start"].shape[0]
+        self.player_sprite.center_y = self.object_map["start"].shape[1]
         self.scene.add_sprite("Player", self.player_sprite)
         self.physics_engine.add_sprite(self.player_sprite,
                                        friction=PLAYER_FRICTION,
@@ -158,8 +172,7 @@ class GameWindow(arcade.Window):
     def on_draw(self):
         """ Draw everything """
         self.clear()
-        self.camera.move_to((self.player_sprite.center_x - self.camera.viewport_width / 2, 
-                             self.player_sprite.center_y - self.camera.viewport_height / 2), .5)
+        self.place_camera()
         self.camera.use()
 
         arcade.draw_texture_rectangle(self.tile_map.width * TILE_SIZE/2, self.tile_map.height * TILE_SIZE/2, self.tile_map.width * TILE_SIZE, self.tile_map.height * TILE_SIZE, self.background)
