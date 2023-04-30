@@ -91,7 +91,7 @@ class BoatView(arcade.View):
 
 
     def setup(self, dock):
-        self.asset = dock
+        self.inventaire = dock
 
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
@@ -127,9 +127,16 @@ class BoatView(arcade.View):
             arcade.draw_polygon_filled(self.current.shape, RED)
             if self.current.type == "BoatTrunk":
                 arcade.draw_text(self.boat.inventaire[self.current.name], 765 + 30, self.window.height / 2 - 30)
+            else:
+                arcade.draw_text(self.inventaire[self.current.name], 765 + 30, self.window.height - 30)
+
 
         if self.select_dock:
             arcade.draw_polygon_filled(self.select_dock.shape, SELECTED)
+
+            if self.current is None or self.current.type != "PortTrunk":
+                arcade.draw_text(self.inventaire[self.select_dock.name], 765 + 30, self.window.height - 30)
+
 
         if self.select_boat:
             arcade.draw_polygon_filled(self.select_boat.shape, SELECTED)
