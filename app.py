@@ -178,7 +178,21 @@ class GameView(arcade.View):
         self.force = None
 
         with open("assets/inventaire.json") as f:
-            self.dock_inventory = json.load(f)
+            inventory = json.load(f)
+
+        self.dock_inventory = {}
+
+        for obj in self.tile_map.object_lists["objets"]:
+            if obj.type == "Dock":
+                asset = {}
+                k = 0
+                for i in range(3):
+                    for j in range(1, 5):
+                        name = f"port trunk {i}{j}"
+                        asset[name] = inventory[obj.name][k].copy()
+                        k = (k + 1) % len(inventory[obj.name])
+                self.dock_inventory[obj.name] = asset
+                
 
     def come_back(self, ev=None):
         self.window.show_view(self)
