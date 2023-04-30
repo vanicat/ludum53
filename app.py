@@ -110,8 +110,8 @@ class GameView(arcade.View):
     port_pressed: bool = False
     camera: arcade.Camera
     gui_camera: arcade.Camera
-    tile_map = arcade.TileMap
-    background = arcade.Texture
+    tile_map: arcade.TileMap
+    background: arcade.Texture
 
     in_port: Optional[str] = None
 
