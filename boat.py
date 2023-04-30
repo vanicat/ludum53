@@ -58,7 +58,7 @@ class BoatView(arcade.View):
         self.boat = boat
         self.come_back = come_back
 
-        self.tile_map = arcade.load_tilemap("assets/boat.tmx", scaling=7)
+        self.tile_map = arcade.load_tilemap("assets/boat.tmx", scaling=BOAT_VIEW_SCALLING)
         self.background = arcade.load_texture("assets/fond.png")
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)

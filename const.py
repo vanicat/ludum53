@@ -6,6 +6,7 @@ SCREEN_TITLE = "Ludum 32"
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 768
 TILE_SIZE = 32
+BOAT_VIEW_SCALLING = 7
 
 # Damping - Amount of speed lost per second
 DEFAULT_DAMPING = 0.7
