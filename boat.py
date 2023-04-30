@@ -91,13 +91,7 @@ class BoatView(arcade.View):
 
 
     def setup(self, dock):
-        k = 0
-        self.asset = {}
-        for i in range(3):
-            for j in range(1, 5):
-                name = f"port trunk {i}{j}"
-                self.asset[name] = dock[k]
-                k = (k + 1) % len(dock)
+        self.asset = dock
 
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
