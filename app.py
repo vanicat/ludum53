@@ -2,33 +2,8 @@ import arcade
 import math
 import pymunk
 
-SCREEN_TITLE = "Ludum 32"
-
-# Size of screen to show, in pixels
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
-TILE_SIZE = 32
-
-# Damping - Amount of speed lost per second
-DEFAULT_DAMPING = 0.7
-PLAYER_DAMPING = DEFAULT_DAMPING
-
-# Friction between objects
-PLAYER_FRICTION = 5
-WALL_FRICTION = 0.7
-DYNAMIC_ITEM_FRICTION = 0.6
-
-# Mass (defaults to 1)
-PLAYER_MASS = 2.0
-
-# Keep player from going too fast
-PLAYER_MAX_SPEED = 450
-ADV_FORCE = 80 
-DRAG_FORCE = 80
-DERIVE_FORCE = 10
-
-BARRE_SPEED = 2.5
-MAX_BARRE = 290 # doit être divisble par BARRE_SPEED, idéalement en calcul exacte
+from boat import Boat
+from const import *
 
 class GameWindow(arcade.Window):
     """ Main Window """
@@ -39,7 +14,6 @@ class GameWindow(arcade.Window):
     right_pressed: bool
     forward_pressed: bool
     backward_pressed: bool
-    barre: float
     camera: arcade.Camera
     gui_camera: arcade.Camera
     tile_map = arcade.TileMap
@@ -97,17 +71,7 @@ class GameWindow(arcade.Window):
                                             collision_type="wall",
                                             body_type=arcade.PymunkPhysicsEngine.STATIC)
 
-        self.player_sprite = arcade.Sprite("assets/boat.png", 1)
-        self.player_sprite.center_x = self.object_map["start"].shape[0]
-        self.player_sprite.center_y = self.object_map["start"].shape[1]
-        self.scene.add_sprite("Player", self.player_sprite)
-        self.physics_engine.add_sprite(self.player_sprite,
-                                       friction=PLAYER_FRICTION,
-                                       mass=PLAYER_MASS,
-                                       collision_type="player",
-                                       max_velocity=PLAYER_MAX_SPEED)
-        
-
+        self.player_sprite = Boat(self.object_map["start"].shape, self.scene, self.physics_engine)
 
         self.left_pressed = False
         self.right_pressed =  False
@@ -119,7 +83,6 @@ class GameWindow(arcade.Window):
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
-
         if key == arcade.key.LEFT:
             self.left_pressed = True
         elif key == arcade.key.RIGHT:
@@ -131,7 +94,6 @@ class GameWindow(arcade.Window):
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
-
         if key == arcade.key.LEFT:
             self.left_pressed = False
         elif key == arcade.key.RIGHT:
@@ -143,29 +105,7 @@ class GameWindow(arcade.Window):
 
     def on_update(self, delta_time):
         """ Movement and game logic """
-        physique_body = self.physics_engine.sprites[self.player_sprite].body
-        
-        derive = physique_body.velocity.dot(physique_body.rotation_vector.rotated_degrees(90))
-        force = pymunk.Vec2d(0, -DERIVE_FORCE) * derive
-        self.physics_engine.apply_force(self.player_sprite, force)
-        #self.force = force.rotated(physique_body.angle)
-        
-        derive = physique_body.velocity_at_local_point((-10, 0)).dot(physique_body.rotation_vector.rotated_degrees(90 - self.barre / 10))
-        force = pymunk.Vec2d(0, -DERIVE_FORCE) * derive
-        physique_body.apply_force_at_local_point(force, (-10, 0))
-        #self.force = force.rotated(physique_body.angle)
-
-        if self.forward_pressed:
-            force = pymunk.Vec2d(ADV_FORCE, 0)
-            self.physics_engine.apply_force(self.player_sprite, force)
-        if self.backward_pressed:
-            force = pymunk.Vec2d(- ADV_FORCE, 0)
-            self.physics_engine.apply_force(self.player_sprite, force)
-        if self.right_pressed:
-            self.barre = max(-MAX_BARRE, self.barre - BARRE_SPEED)
-        if self.left_pressed:
-            self.barre = min(MAX_BARRE, self.barre + BARRE_SPEED)
-                             
+        self.player_sprite.my_update(self.left_pressed, self.right_pressed, self.forward_pressed, self.backward_pressed)
 
         self.physics_engine.step()
 
@@ -178,7 +118,7 @@ class GameWindow(arcade.Window):
         arcade.draw_texture_rectangle(self.tile_map.width * TILE_SIZE/2, self.tile_map.height * TILE_SIZE/2, self.tile_map.width * TILE_SIZE, self.tile_map.height * TILE_SIZE, self.background)
         self.scene.draw()
 
-        self.roue.angle = self.barre
+        self.roue.angle = self.player_sprite.barre
 
         self.gui_camera.use()
         self.gui.draw()
