@@ -114,6 +114,13 @@ class BoatView(arcade.View):
                 self.select_dock = self.current
         return super().on_mouse_press(x, y, button, modifiers)
 
+    @staticmethod
+    def draw_text_content(asset, x, y):
+        arcade.draw_text(asset["name"], x, y)
+        if asset["dest"]:
+            arcade.draw_text(f"destination: {asset['dest']}", x, y - 20)
+            arcade.draw_text(f"expected pay: {asset['pay']}", x, y - 40)
+
     def on_draw(self):
         """ Draw everything """
         self.clear()
@@ -123,26 +130,35 @@ class BoatView(arcade.View):
         for obj in self.tile_map.object_lists["coffres"]:
             arcade.draw_polygon_outline(obj.shape, RED)
 
+        superior_asset = None
+        inferior_asset = None
+
         if self.current:
             arcade.draw_polygon_filled(self.current.shape, RED)
             if self.current.type == "BoatTrunk":
-                arcade.draw_text(self.boat.inventaire[self.current.name], 765 + 30, self.window.height / 2 - 30)
-            else:
-                arcade.draw_text(self.inventaire[self.current.name], 765 + 30, self.window.height - 30)
-
+                inferior_asset = self.boat.inventaire[self.current.name]
+            elif self.current.type == "PortTrunk":
+                superior_asset = self.inventaire[self.current.name]
 
         if self.select_dock:
             arcade.draw_polygon_filled(self.select_dock.shape, SELECTED)
 
-            if self.current is None or self.current.type != "PortTrunk":
-                arcade.draw_text(self.inventaire[self.select_dock.name], 765 + 30, self.window.height - 30)
+            if superior_asset is None:
+                superior_asset = self.inventaire[self.select_dock.name]
 
 
         if self.select_boat:
             arcade.draw_polygon_filled(self.select_boat.shape, SELECTED)
 
-            if self.current is None or self.current.type != "BoatTrunk":
-                arcade.draw_text(self.boat.inventaire[self.select_boat.name], 765 + 30, self.window.height / 2 - 30)
+            if inferior_asset is None:
+                inferior_asset = self.boat.inventaire[self.select_boat.name]
+
+        if superior_asset is not None:
+            self.draw_text_content(superior_asset, 765 + 30, self.window.height - 30)
+
+        if inferior_asset is not None:
+            self.draw_text_content(inferior_asset, 765 + 30, self.window.height / 2 - 30)
+
 
 
     def on_show_view(self):
