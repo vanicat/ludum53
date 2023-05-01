@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="22">
+ <editorsettings>
+  <export target="carte1.tmj" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" source="terrain.tsx"/>
  <layer id="7" name="killer" width="100" height="100">
   <data encoding="csv">
@@ -319,28 +322,46 @@
   </object>
   <object id="16" name="Paristant" type="Dock" x="352.25" y="1328.5" width="127.75" height="58.5">
    <properties>
+    <property name="desc">Where it all begin.
+
+You heard that, if you follow the coast to the north, you will find the port of Souliac.</property>
     <property name="display name" value="Paristant"/>
     <property name="inventaire" value="{  &quot;local&quot;: &quot;Wok&quot;,  &quot;distant&quot;: [     &quot;Potato&quot;,     &quot;Rutabaga&quot;  ] }"/>
    </properties>
   </object>
   <object id="17" name="Souliac" type="Dock" x="1662.92" y="704.75" width="129" height="41">
    <properties>
+    <property name="desc">The small city of Souliac,
+
+Everything is pacefull here.
+
+The locals fear the black water that can be found eastward,
+and so do not like the inhabitant of Swaristant north from here.</property>
     <property name="inventaire" value="{ &quot;local&quot;: &quot;Rutabaga&quot;, &quot;distant&quot;: [ &quot;Brussels sprouts&quot;, &quot;Lentil&quot;]}"/>
    </properties>
   </object>
   <object id="19" name="Vanvira" type="Dock" x="1377.33" y="1994.34" width="128.667" height="50">
    <properties>
+    <property name="desc">A beautiful island at the center of the Narrow sea.
+
+Rumor say that best potatoes are in Der Pellimare, South of here.</property>
     <property name="inventaire" value="{  &quot;local&quot;: &quot;Radish&quot;,  &quot;distant&quot;: [     &quot;Wok&quot;,     &quot;Potato&quot;  ]}"/>
     <property name="toto" value="tutu"/>
    </properties>
   </object>
-  <object id="20" name="Nikologa" type="Dock" x="2464" y="324" width="129.333" height="42.3333">
+  <object id="20" name="Swaristant" type="Dock" x="2464" y="324" width="129.333" height="42.3333">
    <properties>
-    <property name="inventaire" value="{  &quot;local&quot;: &quot;Lentil&quot;,  &quot;distant&quot;: [     &quot;Potato&quot;,     &quot;Rutabaga&quot;  ]}"/>
+    <property name="desc">The nearby black water make the street of Swaristant unconfortable.
+
+Locals wish for Radish from the south-west island of Vanvira.</property>
+    <property name="inventaire" value="{  &quot;local&quot;: &quot;Lentil&quot;,  &quot;distant&quot;: [     &quot;Potato&quot;,     &quot;Radish&quot;  ]}"/>
    </properties>
   </object>
-  <object id="21" name="FarAway" type="Dock" x="768" y="2772" width="126" height="43">
+  <object id="21" name="Der Pellimare" type="Dock" x="768" y="2772" width="126" height="43">
    <properties>
+    <property name="desc">The south of the Narrow sea,
+
+The locacs all want to sell you there potatoes: they are the best in the known world.</property>
     <property name="inventaire" value="{ &quot;local&quot;: &quot;Potato&quot;,  &quot;distant&quot;: [     &quot;Radish&quot;,     &quot;Brussels sprouts&quot; ] }"/>
    </properties>
   </object>
