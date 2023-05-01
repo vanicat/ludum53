@@ -121,7 +121,11 @@ class BoatView(arcade.View):
             elif obj.name == "market":
                 self.maket_zone = obj
 
-
+    def default_select(self):
+        for obj in self.tile_map.object_lists["coffres"]:
+            if obj.type == "BoatTrunk" and self.boat.inventaire[obj.name]["name"] == "Nothing":
+                self.select_boat = obj
+                return
 
     def setup(self, dock, inventaire:dict, market:dict):
         self.dock = dock
@@ -142,6 +146,8 @@ class BoatView(arcade.View):
         width = int(self.maket_zone.shape[2][0] - x)  #type: ignore[index,misc]
 
         self.market_txt = arcade.Text(txt, x, y, anchor_x="left", anchor_y="top", multiline=True, width=width)
+
+        self.default_select()
 
     def on_update(self, dt):
         self.selected_market_values()
@@ -204,6 +210,8 @@ class BoatView(arcade.View):
             dock_name = self.select_dock.name
             boat_name = self.select_boat.name
             self.inventaire[dock_name], self.boat.inventaire[boat_name] = self.boat.inventaire[boat_name], self.inventaire[dock_name]
+
+            self.default_select()
 
     def sell(self):
         if self.select_boat:
