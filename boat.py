@@ -147,8 +147,11 @@ class BoatView(arcade.View):
                 self.select_boat = self.current
             elif self.current.type == "PortTrunk":
                 self.select_dock = self.current
-            elif self.current.type == "ButtonExchange":
+        if self.button:
+            if self.button.name == "exchange":
                 self.exchange()
+            elif self.button.name == "sell":
+                self.sell()
         return super().on_mouse_press(x, y, button, modifiers)
     
     def exchange(self):
@@ -156,6 +159,10 @@ class BoatView(arcade.View):
             dock_name = self.select_dock.name
             boat_name = self.select_boat.name
             self.inventaire[dock_name], self.boat.inventaire[boat_name] = self.boat.inventaire[boat_name], self.inventaire[dock_name]
+
+    def sell(self):
+        if self.select_boat:
+            self.boat.inventaire[self.select_boat.name] = { "name": "Nothing" }
 
     @staticmethod
     def draw_text_content(asset, pos):
