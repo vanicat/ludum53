@@ -1,3 +1,5 @@
 ludum/Lib/site-packages/*
 ludum/Scripts/*
 *.pyc
+app.build/*
+app.dist/*
