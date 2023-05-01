@@ -126,9 +126,8 @@ class BoatView(arcade.View):
     @staticmethod
     def draw_text_content(asset, x, y):
         arcade.draw_text(asset["name"], x, y)
-        if asset["dest"]:
-            arcade.draw_text(f"destination: {asset['dest']}", x, y - 20)
-            arcade.draw_text(f"expected pay: {asset['pay']}", x, y - 40)
+        if "value" in asset:
+            arcade.draw_text(f"Price: {asset['value']}", x, y - 40)
 
     def on_draw(self):
         """ Draw everything """

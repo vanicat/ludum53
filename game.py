@@ -1,4 +1,5 @@
 import json
+from random import random
 from typing import Optional
 import arcade
 from boat import Boat, BoatView
@@ -73,7 +74,6 @@ class GameView(arcade.View):
         for obj in self.object_map.values():
             if "inventaire" in obj.properties:
                 obj.properties["inventaire"] = json.loads(obj.properties["inventaire"])
-            print(obj)
 
         self.physics_engine.add_sprite_list(self.scene.get_sprite_list("Niveau 0"),
                                             friction=WALL_FRICTION,
@@ -86,20 +86,37 @@ class GameView(arcade.View):
 
         self.force = None
 
-        with open("assets/inventaire.json") as f:
-            inventory = json.load(f)
+        with open("assets/materiel.json") as f:
+            materiels = json.load(f)
+
+        def generate_inventory(prob_dock):
+            while True:
+                for m in materiels:
+                    proba = m["proba"]
+                    price = m["base price"]
+                    if m["name"] == prob_dock["local"]:
+                        proba *= LOCAL_PROB_MULT
+                        price *= LOCAL_MULT_PRICE
+                    elif m["name"] in prob_dock["distant"]:
+                        continue 
+                    if random() < proba:
+                        v = {
+                            "name": m["name"],
+                            "value": myround(price * (1 + 0.2 * (random() - 0.5)))
+                        }
+                        yield v
+
 
         self.dock_inventory = {}
 
         for obj in self.tile_map.object_lists["objets"]:
             if obj.type == "Dock":
                 asset = {}
-                k = 0
+                objects = generate_inventory(obj.properties["inventaire"])
                 for i in range(3):
                     for j in range(1, 5):
                         name = f"port trunk {i}{j}"
-                        asset[name] = inventory[obj.name][k].copy()
-                        k = (k + 1) % len(inventory[obj.name])
+                        asset[name] = next(objects)
                 self.dock_inventory[obj.name] = asset
                 
 

@@ -31,3 +31,13 @@ MAX_BARRE = 290 # doit être divisble par BARRE_SPEED, idéalement en calcul exa
 
 RED = arcade.color_from_hex_string("#950A0A")
 SELECTED = arcade.color_from_hex_string("#1023A1")
+
+
+LOCAL_MULT_PRICE = 0.5
+DIST_MULT_PRICE = 2
+DIST_MULT_REDUCE = 0.9
+
+LOCAL_PROB_MULT = 2
+
+def myround(x):
+    return round(x * 4)/4
