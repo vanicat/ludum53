@@ -158,10 +158,11 @@ class BoatView(arcade.View):
             self.inventaire[dock_name], self.boat.inventaire[boat_name] = self.boat.inventaire[boat_name], self.inventaire[dock_name]
 
     @staticmethod
-    def draw_text_content(asset, x, y):
-        arcade.draw_text(asset["name"], x, y)
+    def draw_text_content(asset, pos):
+        x, y = pos
+        arcade.draw_text(asset["name"], x, y, anchor_y="top")
         if "value" in asset:
-            arcade.draw_text(f"Price: {asset['value']}", x, y - 40)
+            arcade.draw_text(f"Price: {asset['value']}", x, y - 40, anchor_y="top")
 
     def draw_dock(self):
         x, y = self.description.shape[0]
@@ -200,10 +201,10 @@ class BoatView(arcade.View):
                 inferior_asset = self.boat.inventaire[self.select_boat.name]
 
         if superior_asset is not None:
-            self.draw_text_content(superior_asset, 765 + 30, self.window.height - 30)
+            self.draw_text_content(superior_asset, self.tosell.shape[0])
 
         if inferior_asset is not None:
-            self.draw_text_content(inferior_asset, 765 + 30, self.window.height / 2 - 30)
+            self.draw_text_content(inferior_asset, self.tobuy.shape[0])
 
         if self.button:
             arcade.draw_polygon_filled(self.button.shape, RED)
