@@ -3,3 +3,4 @@ ludum/Scripts/*
 *.pyc
 app.build/*
 app.dist/*
+ludum/pyvenv.cfg

@@ -70,6 +70,12 @@ class Menu(arcade.View):
         self.v_box.add(quit_button.with_space_around(bottom=20))
         quit_button.on_click = self.quit  # type: ignore[method-assign]
 
+        self.text = arcade.Text("""
+Use :
+  - a/s to accelerate/brake
+  - w/d to steer the well
+  - ESC for pause/restart""", start_x=900, start_y=400, multiline=True, width = 400)
+
         self.manager.add(
             arcade.gui.UIAnchorWidget(anchor_x="center_x", anchor_y="center_y", child=self.v_box)
         )
@@ -103,7 +109,7 @@ class Menu(arcade.View):
     def on_draw(self):
         self.clear()
         self.manager.draw()
-        return super().on_draw()
+        self.text.draw()
 
 def start_game(window):
     start_view = GameView(window)
