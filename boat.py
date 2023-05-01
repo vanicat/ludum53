@@ -152,6 +152,8 @@ class BoatView(arcade.View):
                 self.exchange()
             elif self.button.name == "sell":
                 self.sell()
+            elif self.button.name == "leave":
+                self.come_back()
         return super().on_mouse_press(x, y, button, modifiers)
     
     def exchange(self):
