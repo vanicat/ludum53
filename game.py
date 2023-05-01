@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import json
 from random import random
 from typing import Optional
@@ -89,15 +90,15 @@ class GameView(arcade.View):
         with open("assets/materiel.json") as f:
             materiels = json.load(f)
 
-        def generate_inventory(prob_dock):
+        def generate_inventory(dock):
             while True:
                 for m in materiels:
                     proba = m["proba"]
                     price = m["base price"]
-                    if m["name"] == prob_dock["local"]:
+                    if m["name"] == dock["local"]:
                         proba *= LOCAL_PROB_MULT
                         price *= LOCAL_MULT_PRICE
-                    elif m["name"] in prob_dock["distant"]:
+                    elif m["name"] in dock["distant"]:
                         continue 
                     if random() < proba:
                         v = {
