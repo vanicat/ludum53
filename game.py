@@ -223,7 +223,7 @@ class GameView(arcade.View):
 
         if self.in_port:
             self.docking_message.draw()
-        self.fuel_message.text = f"fuel: {self.player_sprite.fuel}"
+        self.fuel_message.text = f"fuel: {round(self.player_sprite.fuel, 1)}"
         self.fuel_message.draw()
         self.money_message.text = f"cash: {self.player_sprite.money}"
         self.money_message.draw()

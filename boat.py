@@ -57,10 +57,12 @@ class Boat(arcade.Sprite):
         self.physique_body.apply_force_at_local_point(force, (-10, 0))
         #self.force = force.rotated(physique_body.angle)
 
-        if forward_pressed:
+        if forward_pressed and self.fuel > 0:
             force = pymunk.Vec2d(ADV_FORCE, 0)
             self.physics_engine.apply_force(self, force)
-        if backward_pressed:
+            self.fuel -= 1/256
+        if backward_pressed and self.fuel > 0:
+            self.fuel -= 1/256
             force = pymunk.Vec2d(- ADV_FORCE, 0)
             self.physics_engine.apply_force(self, force)
         if right_pressed:
