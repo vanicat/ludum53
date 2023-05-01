@@ -12,6 +12,7 @@ class Boat(arcade.Sprite):
     barre: float
     inventaire: dict
     money: float
+    fuel: float
 
     def __init__(self, pos:tuple[float, float], scene:arcade.Scene, engine:arcade.PymunkPhysicsEngine):
         super().__init__("assets/boat.png", 2)
@@ -42,6 +43,7 @@ class Boat(arcade.Sprite):
                 }
 
         self.money = STARTING_MONEY
+        self.fuel = STARTING_FUEL
 
 
     def my_update(self, left_pressed, right_pressed, forward_pressed, backward_pressed):  
