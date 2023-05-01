@@ -278,11 +278,33 @@ class BoatView(arcade.View):
             if inferior_asset is None:
                 inferior_asset = self.boat.inventaire[self.select_boat.name]
 
+        width = self.tosell.shape[2][0] - self.tosell.shape[0][0]
+
         if superior_asset is not None:
-            self.draw_text_content(superior_asset, self.tosell.shape[0], "Price")
+            if "value" in superior_asset:
+                txt = (f"Selected container\n"
+                    f"    {superior_asset['name']}:"
+                    f" for {superior_asset['value']} $")
+            else:
+                txt = "Selected container\n    Empty"
+        else:
+            txt = "No selected container in dock"
+        arcade.draw_text(txt, self.tosell.shape[0][0], self.tosell.shape[0][1],
+                             anchor_y="top",
+                             multiline=True, width=width)
 
         if inferior_asset is not None:
-            self.draw_text_content(inferior_asset, self.tobuy.shape[0], "Bought at")
+            if "value" in inferior_asset:
+                txt = (f"Selected container\n"
+                    f"    {inferior_asset['name']}:"
+                    f"\n    bought for {inferior_asset['value']} $")
+            else:
+                txt = "Selected container\n    Empty"
+        else:
+            txt = "No selected container in the boat"
+        arcade.draw_text(txt, self.tobuy.shape[0][0], self.tobuy.shape[0][1],
+                        anchor_y="top",
+                        multiline=True, width=width)
 
         if self.button:
             arcade.draw_polygon_filled(self.button.shape, RED)
