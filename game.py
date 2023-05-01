@@ -49,10 +49,25 @@ class GameView(arcade.View):
 
         self.gui = arcade.Scene()
         self.gui.add_sprite_list("GUI")
+        self.roue_dir = arcade.Sprite("assets/roue2-direction.png", 4) 
+        self.roue_dir.center_x = self.window.width - 64
+        self.roue_dir.center_y = self.window.height - 64 - 5
         self.roue = arcade.Sprite("assets/roue2.png", 4) 
         self.roue.center_x = self.window.width - 64
-        self.roue.center_y = self.window.height - 64
+        self.roue.center_y = self.window.height - 64 - 15
+        self.docking_message = arcade.Text("Press P to dock", start_x=self.roue.left, start_y=self.roue.top,
+                                           anchor_x="right", anchor_y="top")
+        self.fuel_message = arcade.Text("fuel: XXXXXX", self.docking_message.left, self.docking_message.bottom,
+                                        anchor_x="left", anchor_y="top")
+        self.money_message = arcade.Text("money: XXXXXX", self.fuel_message.left, self.fuel_message.bottom,
+                                          anchor_x="left", anchor_y="top")
+        sx = self.docking_message.left - 10
+        sy = self.window.height
+        ex = self.window.width
+        ey = self.roue.bottom - 10
+        self.gui_rectangle = [(sx, sy), (sx, ey), (ex, ey), (ex, sy)]
         self.gui.add_sprite("GUI", self.roue)
+        self.gui.add_sprite("GUI", self.roue_dir)
 
         layer_options = {
             "Niveau 0": {
@@ -143,13 +158,13 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
-        if key == arcade.key.LEFT:
+        if key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = True
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = True
-        elif key == arcade.key.UP:
+        elif key == arcade.key.UP or key == arcade.key.W:
             self.forward_pressed = True
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.DOWN or key == arcade.key.S:
             self.backward_pressed = True
         elif key == arcade.key.P:
             self.port_pressed = True
@@ -157,15 +172,16 @@ class GameView(arcade.View):
             #TODO: better restarting of a game, with no leak
             self.window.show_menu(self.come_back)
 
+
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
-        if key == arcade.key.LEFT:
+        if key == arcade.key.LEFT or key == arcade.key.A:
             self.left_pressed = False
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.right_pressed = False
-        elif key == arcade.key.UP:
+        elif key == arcade.key.UP or key == arcade.key.W:
             self.forward_pressed = False
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.DOWN or key == arcade.key.S:
             self.backward_pressed = False
         elif key == arcade.key.P:
             self.port_pressed = False
@@ -203,10 +219,11 @@ class GameView(arcade.View):
         self.roue.angle = self.player_sprite.barre
 
         self.gui_camera.use()
+        arcade.draw_polygon_filled(self.gui_rectangle, arcade.csscolor.BLACK)
         self.gui.draw()
 
         if self.in_port:
-            arcade.draw_text("Press P to dock", 10, self.window.height - 20)
+            self.docking_message.draw()
 
         if self.force:
             x = self.player_sprite.center_x
