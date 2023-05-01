@@ -1,6 +1,6 @@
 import arcade 
 
-SCREEN_TITLE = "Ludum 32"
+SCREEN_TITLE = "Before the black water"
 
 # Size of screen to show, in pixels
 SCREEN_WIDTH = 1280
