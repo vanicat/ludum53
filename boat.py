@@ -100,9 +100,9 @@ class BoatView(arcade.View):
 
             if obj.type == "Button":
                 self.buttons.append(obj)
-                xs, ys = obj.shape[0]
-                xe, ye = obj.shape[2]
-                txt = arcade.Text(obj.properties["txt"], (xs + xe) / 2, (ys + ye) / 2, anchor_x="center", anchor_y="center")
+                xs, ys = obj.shape[0]  # type: ignore[misc]
+                xe, ye = obj.shape[2]  # type: ignore[misc]
+                txt = arcade.Text(obj.properties["txt"], (xs + xe) / 2, (ys + ye) / 2, anchor_x="center", anchor_y="center") #type: ignore[index]
                 self.txt.append(txt)  
             elif obj.name == "tobuy":
                 self.tobuy = obj
