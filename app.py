@@ -21,7 +21,7 @@ class GameWindow(arcade.Window):
 
         arcade.set_background_color(arcade.csscolor.CORNFLOWER_BLUE)
 
-        self.my_music = arcade.load_sound("assets/music/music-wave.wav")
+        self.my_music = arcade.load_sound("assets/music/music-wave.mp3")
         self.media_player = self.my_music.play(loop=True)
 
         self.menu = Menu(self)
