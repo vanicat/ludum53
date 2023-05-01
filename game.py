@@ -1,6 +1,6 @@
 from collections import OrderedDict
 import json
-from random import random
+from random import choice, random
 from typing import Optional
 import arcade
 from boat import Boat, BoatView
@@ -90,20 +90,22 @@ class GameView(arcade.View):
         with open("assets/materiel.json") as f:
             materiels = json.load(f)
 
-        def generate_inventory(dock):
+        def generate_inventory(dock, market):
             while True:
-                for m in materiels:
-                    proba = m["proba"]
-                    price = m["base price"]
-                    if m["name"] == dock["local"]:
-                        proba *= LOCAL_PROB_MULT
-                        price *= LOCAL_MULT_PRICE
-                    elif m["name"] in dock["distant"]:
-                        continue 
-                    if random() < proba:
+                m = choice(materiels)
+                proba = m["proba"]
+                price = m["base price"]
+                if m["name"] == dock["local"]:
+                    proba *= LOCAL_PROB_MULT
+                    price *= LOCAL_MULT_PRICE
+                elif m["name"] in dock["distant"]:
+                    continue 
+                if random() < proba:
+                    price = myround(price * (1 + 0.2 * (random() - 0.5)))
+                    if price > market[m["name"]]:
                         v = {
                             "name": m["name"],
-                            "value": myround(price * (1 + 0.2 * (random() - 0.5)))
+                            "value": price
                         }
                         yield v
 
@@ -113,14 +115,6 @@ class GameView(arcade.View):
 
         for obj in self.tile_map.object_lists["objets"]:
             if obj.type == "Dock":
-                asset = {}
-                objects = generate_inventory(obj.properties["inventaire"])
-                for i in range(3):
-                    for j in range(1, 5):
-                        name = f"port trunk {i}{j}"
-                        asset[name] = next(objects)
-                self.dock_inventory[obj.name] = asset
-
                 market = OrderedDict()
                 for m in materiels:
                     price = m["base price"]
@@ -133,7 +127,15 @@ class GameView(arcade.View):
                     market[m["name"]] = myround(price)
 
                 self.dock_market[obj.name] = market
-       
+
+                asset = {}
+                objects = generate_inventory(obj.properties["inventaire"], market)
+                for i in range(3):
+                    for j in range(1, 5):
+                        name = f"port trunk {i}{j}"
+                        asset[name] = next(objects)
+                self.dock_inventory[obj.name] = asset
+    
 
     def come_back(self, ev=None):
         self.window.show_view(self)
