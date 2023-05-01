@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="67">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="69">
  <editorsettings>
   <export target="boat.tmj" format="json"/>
  </editorsettings>
@@ -33,9 +33,10 @@
   <object id="41" name="port trunk 24" type="PortTrunk" x="467" y="124" width="61" height="30"/>
  </objectgroup>
  <objectgroup id="8" name="boutons et texte">
-  <object id="57" name="description" type="zone" x="822.667" y="17.3333" width="284" height="97.3333"/>
-  <object id="58" name="tosell" type="zone" x="824" y="129.333" width="288" height="62.6667"/>
-  <object id="59" name="exchange" type="Button" x="822.667" y="206.667" width="137.333" height="30.6667">
+  <object id="57" name="description" type="zone" x="813.333" y="17.3333" width="284" height="97.3333"/>
+  <object id="68" name="market" type="zone" x="813.333" y="123.333" width="284" height="180"/>
+  <object id="58" name="tosell" type="zone" x="811.333" y="322.667" width="288" height="62.6667"/>
+  <object id="59" name="exchange" type="Button" x="811.333" y="399.333" width="137.333" height="30.6667">
    <properties>
     <property name="txt" value="Exchange"/>
    </properties>
@@ -45,18 +46,19 @@
     <property name="txt" value="Leave"/>
    </properties>
   </object>
-  <object id="60" name="sell" type="Button" x="980" y="206.667" width="129.333" height="30.6667">
+  <object id="60" name="sell" type="Button" x="968" y="400" width="129.333" height="30.6667">
    <properties>
     <property name="txt" value="Sell selected"/>
    </properties>
   </object>
-  <object id="61" name="sell_texte" type="txt" x="997.5" y="212.729" width="105" height="17.875">
+  <object id="61" name="sell_texte" type="txt" x="982.167" y="406.729" width="105" height="17.875">
    <text wrap="1" color="#fc1c45">Sell selected</text>
   </object>
-  <object id="62" name="exc_texte" type="txt" x="859.5" y="213.563" width="73.5" height="17.875">
+  <object id="62" name="exc_texte" type="txt" x="858.167" y="404.896" width="73.5" height="17.875">
    <text wrap="1" color="#fc1c45">Exchange</text>
   </object>
-  <object id="64" name="tobuy" type="zone" x="830" y="345" width="277" height="107"/>
+  <object id="64" name="tobuy" type="zone" x="811.333" y="504.333" width="289" height="107"/>
+  <object id="67" name="money" type="zone" x="810.667" y="440.333" width="287" height="52.3333"/>
  </objectgroup>
  <layer id="6" name="remplissage" width="60" height="30">
   <data encoding="csv">

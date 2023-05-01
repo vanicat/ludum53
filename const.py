@@ -2,6 +2,8 @@ import arcade
 
 SCREEN_TITLE = "Before the black water"
 
+STARTING_MONEY = 500
+
 # Size of screen to show, in pixels
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 768

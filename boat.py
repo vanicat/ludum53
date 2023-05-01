@@ -11,6 +11,7 @@ class Boat(arcade.Sprite):
     physique_body: pymunk.Body
     barre: float
     inventaire: dict
+    money: float
 
     def __init__(self, pos:tuple[float, float], scene:arcade.Scene, engine:arcade.PymunkPhysicsEngine):
         super().__init__("assets/boat.png", 2)
@@ -39,6 +40,8 @@ class Boat(arcade.Sprite):
                     "dest": None,
                     "pay": 0
                 }
+
+        self.money = STARTING_MONEY
 
 
     def my_update(self, left_pressed, right_pressed, forward_pressed, backward_pressed):  
@@ -110,6 +113,8 @@ class BoatView(arcade.View):
                 self.tosell = obj
             elif obj.name == "description":
                 self.description = obj
+            elif obj.name == "money":
+                self.money = obj
 
 
 
@@ -173,8 +178,26 @@ class BoatView(arcade.View):
         if "value" in asset:
             arcade.draw_text(f"Price: {asset['value']}", x, y - 40, anchor_y="top")
 
-    def draw_dock(self):
-        x, y = self.description.shape[0]
+    def draw_money(self):
+        x, y = self.money.shape[0]
+        width = self.money.shape[2][0] - x
+
+        txt = f"Cash: {self.boat.money}$"
+
+        if self.select_boat and "value" in self.boat.inventaire[self.select_boat.name]:
+            value_boat = self.boat.inventaire[self.select_boat.name]["value"]
+            txt += f",\nafter selling: {self.boat.money + value_boat}"
+        else:
+            value_boat = 0
+
+        if self.select_dock:
+            dock_name = self.select_dock.name
+            value_dock = self.inventaire[dock_name].get("value", 0)
+            txt += f",\nafter exchange: {self.boat.money + value_boat - value_dock}"
+        
+        arcade.draw_text(txt, x, y, anchor_y="top", multiline=True, width=width)
+
+    
 
 
     def on_draw(self):
@@ -222,6 +245,8 @@ class BoatView(arcade.View):
             txt.draw()
 
         self.description_txt.draw()
+
+        self.draw_money()
 
     def on_show_view(self):
         self.window.set_mouse_visible(True)
