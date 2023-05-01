@@ -283,7 +283,7 @@
          "name":"boutons et texte",
          "objects":[
                 {
-                 "height":97.3333333333333,
+                 "height":129.333333333333,
                  "id":57,
                  "name":"description",
                  "rotation":0,
@@ -302,7 +302,7 @@
                  "visible":true,
                  "width":284,
                  "x":813.333333333333,
-                 "y":123.333333333333
+                 "y":170
                 }, 
                 {
                  "height":62.6666666666667,

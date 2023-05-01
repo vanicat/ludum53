@@ -361,7 +361,7 @@ Locals wish for Radish from the south-west island of Vanvira.</property>
    <properties>
     <property name="desc">The south of the Narrow sea,
 
-The locacs all want to sell you there potatoes: they are the best in the known world.</property>
+The locals all want to sell you there potatoes: they are the best in the known world.</property>
     <property name="inventaire" value="{ &quot;local&quot;: &quot;Potato&quot;,  &quot;distant&quot;: [     &quot;Radish&quot;,     &quot;Brussels sprouts&quot; ] }"/>
    </properties>
   </object>
