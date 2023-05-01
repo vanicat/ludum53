@@ -74,6 +74,9 @@ class BoatView(arcade.View):
     select_boat:  Optional[arcade.TiledObject] = None
     select_dock:  Optional[arcade.TiledObject] = None
     asset: dict
+    market: dict
+    boat_price: float = 0.0
+    dock_price: float = 0.0
 
     def __init__(self, window: Window, boat: Boat, come_back):
         super().__init__(window)
@@ -123,7 +126,7 @@ class BoatView(arcade.View):
     def setup(self, dock, inventaire:dict, market:dict):
         self.dock = dock
         self.inventaire = inventaire
-        self.maket = market
+        self.market = market
 
         x, y = self.description.shape[0] #type: ignore[misc]
         width = int(self.description.shape[2][0] - x)  #type: ignore[index,misc]
@@ -140,6 +143,25 @@ class BoatView(arcade.View):
 
         self.market_txt = arcade.Text(txt, x, y, anchor_x="left", anchor_y="top", multiline=True, width=width)
 
+    def on_update(self, dt):
+        self.selected_market_values()
+    
+    def selected_market_values(self):
+        self.boat_price = 0.0
+        self.dock_price = 0.0
+        if self.select_boat:
+            name = self.select_boat.name
+            item = self.boat.inventaire[name]
+            if item["name"] in self.market:
+                self.boat_price = self.market[item["name"]]
+            
+        if self.select_dock:
+            name = self.select_dock.name
+            item = self.inventaire[name]
+            if "value" in item:
+                self.dock_price = item["value"]
+
+
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         self.current = None
         for obj in self.tile_map.object_lists["coffres"]:
@@ -153,18 +175,20 @@ class BoatView(arcade.View):
 
 
         return super().on_mouse_motion(x, y, dx, dy)
-
+    
     def on_key_press(self, symbol: int, modifiers: int):
         if symbol == arcade.key.ESCAPE:
             self.come_back()
         return super().on_key_press(symbol, modifiers)
-    
+
+
     def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
         if self.current:
             if self.current.type == "BoatTrunk":
                 self.select_boat = self.current
             elif self.current.type == "PortTrunk":
                 self.select_dock = self.current
+
         if self.button:
             if self.button.name == "exchange":
                 self.exchange()
@@ -175,21 +199,23 @@ class BoatView(arcade.View):
         return super().on_mouse_press(x, y, button, modifiers)
     
     def exchange(self):
-        if self.select_boat and self.select_dock:
+        if self.select_boat and self.select_dock and self.boat.money + self.boat_price - self.dock_price >= 0:
+            self.boat.money += self.boat_price - self.dock_price
             dock_name = self.select_dock.name
             boat_name = self.select_boat.name
             self.inventaire[dock_name], self.boat.inventaire[boat_name] = self.boat.inventaire[boat_name], self.inventaire[dock_name]
 
     def sell(self):
         if self.select_boat:
+            self.boat.money += self.boat_price
             self.boat.inventaire[self.select_boat.name] = { "name": "Nothing" }
 
     @staticmethod
-    def draw_text_content(asset, pos):
+    def draw_text_content(asset, pos, price_tag):
         x, y = pos
         arcade.draw_text(asset["name"], x, y, anchor_y="top")
         if "value" in asset:
-            arcade.draw_text(f"Price: {asset['value']}", x, y - 40, anchor_y="top")
+            arcade.draw_text(f"{price_tag}: {asset['value']}", x, y - 40, anchor_y="top")
 
     def draw_money(self):
         x, y = self.money.shape[0]
@@ -197,16 +223,11 @@ class BoatView(arcade.View):
 
         txt = f"Cash: {self.boat.money}$"
 
-        if self.select_boat and "value" in self.boat.inventaire[self.select_boat.name]:
-            value_boat = self.boat.inventaire[self.select_boat.name]["value"]
-            txt += f",\nafter selling: {self.boat.money + value_boat}"
-        else:
-            value_boat = 0
+        if self.boat_price != 0.0:
+            txt += f",\nafter selling: {self.boat.money + self.boat_price}"
 
-        if self.select_dock:
-            dock_name = self.select_dock.name
-            value_dock = self.inventaire[dock_name].get("value", 0)
-            txt += f",\nafter exchange: {self.boat.money + value_boat - value_dock}"
+        if self.dock_price != 0.0:
+            txt += f",\nafter exchange: {self.boat.money + self.boat_price - self.dock_price}"
         
         arcade.draw_text(txt, x, y, anchor_y="top", multiline=True, width=width)
 
@@ -246,10 +267,10 @@ class BoatView(arcade.View):
                 inferior_asset = self.boat.inventaire[self.select_boat.name]
 
         if superior_asset is not None:
-            self.draw_text_content(superior_asset, self.tosell.shape[0])
+            self.draw_text_content(superior_asset, self.tosell.shape[0], "Price")
 
         if inferior_asset is not None:
-            self.draw_text_content(inferior_asset, self.tobuy.shape[0])
+            self.draw_text_content(inferior_asset, self.tobuy.shape[0], "Bought at")
 
         if self.button:
             arcade.draw_polygon_filled(self.button.shape, RED)
