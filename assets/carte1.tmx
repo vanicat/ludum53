@@ -317,19 +317,32 @@
   <object id="9" name="start" type="Start" x="415.333" y="1360">
    <point/>
   </object>
-  <object id="16" name="Paristant" type="Dock" x="352.25" y="1343.5" width="127.75" height="43.5">
+  <object id="16" name="Paristant" type="Dock" x="352.25" y="1328.5" width="127.75" height="58.5">
    <properties>
     <property name="display name" value="Paristant"/>
-    <property name="inventaire" value="[ [ &quot;coco&quot;, 10], [&quot;yo&quot;, 20] ]"/>
+    <property name="inventaire" value="{  &quot;local&quot;: &quot;Wok&quot;,  &quot;distant&quot;: [     &quot;Potato&quot;,     &quot;Rutabaga&quot;  ] }"/>
    </properties>
   </object>
   <object id="17" name="Souliac" type="Dock" x="1662.92" y="704.75" width="129" height="41">
    <properties>
-    <property name="display name" value="New Bordeaux"/>
+    <property name="inventaire" value="{ &quot;local&quot;: &quot;Rutabaga&quot;, &quot;distant&quot;: [ &quot;Brussels sprouts&quot;, &quot;Lentil&quot;]}"/>
    </properties>
   </object>
-  <object id="19" name="Vanvira" type="Dock" x="1377.33" y="1994.34" width="128.667" height="50"/>
-  <object id="20" name="Nikologa" type="Dock" x="2464" y="324" width="129.333" height="42.3333"/>
-  <object id="21" name="FarAway" type="Dock" x="768" y="2772" width="126" height="43"/>
+  <object id="19" name="Vanvira" type="Dock" x="1377.33" y="1994.34" width="128.667" height="50">
+   <properties>
+    <property name="inventaire" value="{  &quot;local&quot;: &quot;Radish&quot;,  &quot;distant&quot;: [     &quot;Wok&quot;,     &quot;Potato&quot;  ]}"/>
+    <property name="toto" value="tutu"/>
+   </properties>
+  </object>
+  <object id="20" name="Nikologa" type="Dock" x="2464" y="324" width="129.333" height="42.3333">
+   <properties>
+    <property name="inventaire" value="{  &quot;local&quot;: &quot;Lentil&quot;,  &quot;distant&quot;: [     &quot;Potato&quot;,     &quot;Rutabaga&quot;  ]}"/>
+   </properties>
+  </object>
+  <object id="21" name="FarAway" type="Dock" x="768" y="2772" width="126" height="43">
+   <properties>
+    <property name="inventaire" value="{ &quot;local&quot;: &quot;Potato&quot;,  &quot;distant&quot;: [     &quot;Radish&quot;,     &quot;Brussels sprouts&quot; ] }"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

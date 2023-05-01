@@ -70,6 +70,11 @@ class GameView(arcade.View):
         object_layer = self.tile_map.object_lists["objets"]
         self.object_map = { obj.name: obj for obj in object_layer }
 
+        for obj in self.object_map.values():
+            if "inventaire" in obj.properties:
+                obj.properties["inventaire"] = json.loads(obj.properties["inventaire"])
+            print(obj)
+
         self.physics_engine.add_sprite_list(self.scene.get_sprite_list("Niveau 0"),
                                             friction=WALL_FRICTION,
                                             collision_type="wall",
