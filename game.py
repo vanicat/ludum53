@@ -109,6 +109,7 @@ class GameView(arcade.View):
 
 
         self.dock_inventory = {}
+        self.dock_market = {}
 
         for obj in self.tile_map.object_lists["objets"]:
             if obj.type == "Dock":
@@ -119,7 +120,20 @@ class GameView(arcade.View):
                         name = f"port trunk {i}{j}"
                         asset[name] = next(objects)
                 self.dock_inventory[obj.name] = asset
-                
+
+                market = OrderedDict()
+                for m in materiels:
+                    price = m["base price"]
+                    if m["name"] == obj.properties["inventaire"]["local"]:
+                        price *= 0
+                    elif m["name"] in obj.properties["inventaire"]["distant"]:
+                        price *= DIST_MULT_PRICE
+
+                    price *= 1 + 0.2 * (random() - 0.7)
+                    market[m["name"]] = myround(price)
+
+                self.dock_market[obj.name] = market
+       
 
     def come_back(self, ev=None):
         self.window.show_view(self)
