@@ -13,17 +13,18 @@ class Boat(arcade.Sprite):
     inventaire: dict
 
     def __init__(self, pos:tuple[float, float], scene:arcade.Scene, engine:arcade.PymunkPhysicsEngine):
-        super().__init__("assets/boat.png", 1)
+        super().__init__("assets/boat.png", 2)
         self.center_x = pos[0]
         self.center_y = pos[1]
         scene.add_sprite("Player", self)
         self.physics_engine = engine
 
         self.physics_engine.add_sprite(self,
-                               friction=PLAYER_FRICTION,
-                               mass=PLAYER_MASS,
-                               collision_type="player",
-                               max_velocity=PLAYER_MAX_SPEED)
+                                       friction=PLAYER_FRICTION,
+                                       mass=PLAYER_MASS,
+                                       collision_type="player",
+                                       max_velocity=PLAYER_MAX_SPEED
+                                      )
         body = self.physics_engine.sprites[self].body
         assert body is not None
         self.physique_body = body

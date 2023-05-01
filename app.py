@@ -157,7 +157,7 @@ class GameView(arcade.View):
             }
         }
 
-        self.tile_map = arcade.load_tilemap("assets/carte1.tmx", layer_options=layer_options)
+        self.tile_map = arcade.load_tilemap("assets/carte1.tmx", layer_options=layer_options, scaling=2)
         self.background = arcade.load_texture("assets/fond.png")
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
@@ -249,7 +249,12 @@ class GameView(arcade.View):
         self.place_camera()
         self.camera.use()
 
-        arcade.draw_texture_rectangle(self.tile_map.width * TILE_SIZE/2, self.tile_map.height * TILE_SIZE/2, self.tile_map.width * TILE_SIZE, self.tile_map.height * TILE_SIZE, self.background)
+        arcade.draw_texture_rectangle(
+            self.tile_map.width * TILE_SIZE,
+            self.tile_map.height * TILE_SIZE,
+            self.tile_map.width * TILE_SIZE * 2,
+            self.tile_map.height * TILE_SIZE * 2, self.background
+        )
         self.scene.draw()
 
         self.roue.angle = self.player_sprite.barre
