@@ -166,7 +166,7 @@ class GameView(arcade.View):
 
         if self.in_port and self.port_pressed:
             self.port_pressed = False
-            self.boat_view.setup(self.dock_inventory[self.in_port.name])
+            self.boat_view.setup(self.in_port, self.dock_inventory[self.in_port.name])
             self.window.show_view(self.boat_view)
 
     def on_draw(self):

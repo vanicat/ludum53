@@ -67,6 +67,7 @@ class Boat(arcade.Sprite):
 class BoatView(arcade.View):
     window: Window
     current: Optional[arcade.TiledObject] = None
+    button: Optional[arcade.TiledObject] = None
     select_boat:  Optional[arcade.TiledObject] = None
     select_dock:  Optional[arcade.TiledObject] = None
     asset: dict
@@ -77,7 +78,7 @@ class BoatView(arcade.View):
         self.boat = boat
         self.come_back = come_back
 
-        self.tile_map = arcade.load_tilemap("assets/boat.tmx", scaling=1)
+        self.tile_map = arcade.load_tilemap("assets/boat.tmj", scaling=1)
         self.background = arcade.load_texture("assets/fond.png")
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
@@ -87,12 +88,38 @@ class BoatView(arcade.View):
             img.top = self.window.height
 
         for obj in self.tile_map.object_lists["coffres"]:
-                for coord in obj.shape:
-                    coord[1] -= img.bottom + 48 # type: ignore[index]
+            for coord in obj.shape:
+                coord[1] -= img.bottom + 48 # type: ignore[index]
+
+        self.txt = []
+        self.buttons = []
+
+        for obj in self.tile_map.object_lists["boutons et texte"]:
+            for coord in obj.shape:
+                coord[1] -= img.bottom + 48 # type: ignore[index]
+
+            if obj.type == "Button":
+                self.buttons.append(obj)
+                xs, ys = obj.shape[0]
+                xe, ye = obj.shape[2]
+                txt = arcade.Text(obj.properties["txt"], (xs + xe) / 2, (ys + ye) / 2, anchor_x="center", anchor_y="center")
+                self.txt.append(txt)  
+            elif obj.name == "tobuy":
+                self.tobuy = obj
+            elif obj.name == "tosell":
+                self.tosell = obj
+            elif obj.name == "description":
+                self.description = obj
 
 
-    def setup(self, dock):
-        self.inventaire = dock
+
+    def setup(self, dock, inventaire):
+        self.dock = dock
+        self.inventaire = inventaire
+
+        x, y = self.description.shape[0]
+        x2, y2 = self.description.shape[1]
+        self.description_txt = arcade.Text(dock.properties["desc"], x, y, anchor_x="left", anchor_y="top", multiline=True, width=x2-x)
 
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
@@ -100,6 +127,13 @@ class BoatView(arcade.View):
         for obj in self.tile_map.object_lists["coffres"]:
             if arcade.is_point_in_polygon(x, y, obj.shape):
                 self.current = obj
+
+        self.button = None
+        for obj in self.buttons:
+            if arcade.is_point_in_polygon(x, y, obj.shape):
+                self.button = obj
+
+
         return super().on_mouse_motion(x, y, dx, dy)
 
     def on_key_press(self, symbol: int, modifiers: int):
@@ -128,6 +162,10 @@ class BoatView(arcade.View):
         arcade.draw_text(asset["name"], x, y)
         if "value" in asset:
             arcade.draw_text(f"Price: {asset['value']}", x, y - 40)
+
+    def draw_dock(self):
+        x, y = self.description.shape[0]
+
 
     def on_draw(self):
         """ Draw everything """
@@ -167,7 +205,13 @@ class BoatView(arcade.View):
         if inferior_asset is not None:
             self.draw_text_content(inferior_asset, 765 + 30, self.window.height / 2 - 30)
 
+        if self.button:
+            arcade.draw_polygon_filled(self.button.shape, RED)
 
+        for txt in self.txt:
+            txt.draw()
+
+        self.description_txt.draw()
 
     def on_show_view(self):
         self.window.set_mouse_visible(True)
