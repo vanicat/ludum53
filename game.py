@@ -82,7 +82,6 @@ class GameView(arcade.View):
         self.background = arcade.load_texture("assets/fond.png")
 
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
-        self.scene.add_sprite_list("Player")
 
         object_layer = self.tile_map.object_lists["objets"]
         self.object_map = { obj.name: obj for obj in object_layer }
