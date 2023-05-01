@@ -115,17 +115,30 @@ class BoatView(arcade.View):
                 self.description = obj
             elif obj.name == "money":
                 self.money = obj
+            elif obj.name == "market":
+                self.maket_zone = obj
 
 
 
-    def setup(self, dock, inventaire):
+    def setup(self, dock, inventaire:dict, market:dict):
         self.dock = dock
         self.inventaire = inventaire
+        self.maket = market
 
-        x, y = self.description.shape[0]
-        x2, y2 = self.description.shape[1]
-        self.description_txt = arcade.Text(dock.properties["desc"], x, y, anchor_x="left", anchor_y="top", multiline=True, width=x2-x)
+        x, y = self.description.shape[0] #type: ignore[misc]
+        width = int(self.description.shape[2][0] - x)  #type: ignore[index,misc]
+        self.description_txt = arcade.Text(dock.properties["desc"], x, y, anchor_x="left", anchor_y="top", multiline=True, width=width)
 
+        txt_lst = ["Buy price:"]
+        for m, v in market.items():
+            txt_lst.append(f"{m}: {v} $")
+
+        txt = "\n  ".join(txt_lst)
+
+        x, y = self.maket_zone.shape[0] #type: ignore[misc]
+        width = int(self.maket_zone.shape[2][0] - x)  #type: ignore[index,misc]
+
+        self.market_txt = arcade.Text(txt, x, y, anchor_x="left", anchor_y="top", multiline=True, width=width)
 
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         self.current = None
@@ -245,6 +258,7 @@ class BoatView(arcade.View):
             txt.draw()
 
         self.description_txt.draw()
+        self.market_txt.draw()
 
         self.draw_money()
 
