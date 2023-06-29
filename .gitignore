@@ -4,3 +4,12 @@ ludum/Scripts/*
 app.build/*
 app.dist/*
 ludum/pyvenv.cfg
+app.cmd
+app.exe
+*.pyd
+*.pyi
+build/*.py
+build/assets/*
+build/python/*
+*.zip
+dark?water-*/*
